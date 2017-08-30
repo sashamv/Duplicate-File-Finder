@@ -17,6 +17,8 @@ public class Finder {
 	
 	public static List<SearchFiles> listFiles = new ArrayList<SearchFiles>();
 	public static int countListFiles = 0;
+	public static int countDuplicateFiles = 0;
+	public static int countMoveFiles = 0;
 	private static String filter;
 	
 	public static void setListFiles(String source) throws IOException {
@@ -34,23 +36,24 @@ public class Finder {
 			}
 		});
 		paths.close();	
+		
+		WriteLog.log("Total added files to List: " + countListFiles);
 	}
 	
 	public static void findDuplicate() throws SecurityException, IOException{
 		WriteLog.log(" *** Start searching the same cheksum *** ");
-		int total = 0;
 		//List<SearchFiles> listFiles = listFiles;
 		for (int i = 0; i < listFiles.size(); i++) {
 			for(int j = i + 1; j < listFiles.size(); j++){
 				if(listFiles.get(j).getMarkDuplicate().contentEquals("0") && listFiles.get(i).getMd5sum().equals(listFiles.get(j).getMd5sum())){
 					listFiles.get(j).setMarkDuplicate("1");
-					total++;
+					countDuplicateFiles++;
 					WriteLog.log("Finding -> source: " + listFiles.get(i).getFilePath() + 
 							"\n	dest: " + listFiles.get(j).getFilePath() + "\n	checksum " + listFiles.get(j).getMd5sum());
 				} 
 			}
 		}
-		WriteLog.log("Total: " + total);
+		WriteLog.log("Total duplicate files: " + countDuplicateFiles);
 		WriteLog.log("*** Completing the search for the same cheksum ***");
 	}	
 	
@@ -97,6 +100,7 @@ public class Finder {
 					try {
 						WriteLog.log("Start moving file" + sf.getFile() + " -> " + destPath);
 						Files.move(sf.getFile(), destPath.toPath(), StandardCopyOption.REPLACE_EXISTING);
+						countMoveFiles++;
 						WriteLog.log("Finished moving file");
 					} catch (IOException e) {
 						WriteLog.log("IOException while moving file " +  e);
@@ -104,6 +108,7 @@ public class Finder {
 					}
 			 }
 		}
+		WriteLog.log("Total moved files: " + countMoveFiles);
 	}	
 	
 }

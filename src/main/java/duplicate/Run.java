@@ -40,7 +40,7 @@ public class Run {
 		Finder.setListFiles(SOURCE);
 		Finder.findDuplicate();
 		Finder.moveFiles(SOURCE, TARGET);
-		
+		WriteLog.log("Total added files to List: " + Finder.countListFiles + " Duplicate: " + Finder.countDuplicateFiles + " Moved: " + Finder.countMoveFiles);
 		WriteLog.log("*** End ***");
 
 	}

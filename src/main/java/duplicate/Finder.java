@@ -3,14 +3,18 @@ package duplicate;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
+import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Stream;
+
+import javax.xml.bind.DatatypeConverter;
 
 
 public class Finder {
@@ -22,7 +26,7 @@ public class Finder {
 	private static String filter;
 	
 	public static void setListFiles(String source) throws IOException {
-		
+	
 		Stream<Path> paths = Files.walk(Paths.get(source));
 		paths.filter(Files::isRegularFile).forEach(file -> {
 			try {
@@ -109,6 +113,23 @@ public class Finder {
 			 }
 		}
 		WriteLog.log("Total moved files: " + countMoveFiles);
-	}	
+	}
+	
+	public static String checkSum(Path file) throws NoSuchAlgorithmException, IOException{
+		InputStream is = Files.newInputStream(file);
+		
+		MessageDigest md = MessageDigest.getInstance("MD5");
+				
+		byte[] dataBytes = new byte[1024];
+		int nread = 0;
+		while ((nread = is.read(dataBytes)) != -1) {
+			   md.update(dataBytes, 0, nread);
+			    };
+		byte[] hash  = md.digest();
+
+	    is.close();
+		
+	    return DatatypeConverter.printHexBinary(hash).toLowerCase().toString();
+	}
 	
 }

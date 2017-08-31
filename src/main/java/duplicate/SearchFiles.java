@@ -5,10 +5,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.attribute.BasicFileAttributes;
 import java.nio.file.attribute.FileTime;
-import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
-
-import javax.xml.bind.DatatypeConverter;
 
 public class SearchFiles {
 	
@@ -28,11 +25,9 @@ public class SearchFiles {
 		
 		BasicFileAttributes fileAttributes = Files.readAttributes(file, BasicFileAttributes.class);
 		this.dateAndtime = fileAttributes.creationTime();
-		
-		MessageDigest md = MessageDigest.getInstance("MD5");
-		md.update(Files.readAllBytes(file));
-		byte[] hash  = md.digest();
-		this.md5sum = DatatypeConverter.printHexBinary(hash).toLowerCase();
+				
+		this.md5sum = Finder.checkSum(file);
+
 		
 		this.markDuplicate = "0";
 		

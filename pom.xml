@@ -2,7 +2,23 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>duplicate</groupId>
   <artifactId>Duplicate-File-Finder</artifactId>
-  <version>0.0.1-SNAPSHOT</version>
+  <version>1.0</version>
+  <build>
+  	<plugins>
+  		<plugin>
+  			<groupId>org.apache.maven.plugins</groupId>
+  			<artifactId>maven-jar-plugin</artifactId>
+  			<configuration>
+  				<archive>
+  					<manifest>
+  						<addClasspath>true</addClasspath>
+  						<mainClass>duplicate.Run</mainClass>
+  					</manifest>
+  				</archive>
+  			</configuration>
+  		</plugin>
+  	</plugins>
+  </build>
   <dependencies>
 		<!-- https://mvnrepository.com/artifact/javax.xml.bind/jaxb-api -->
 		<dependency>
@@ -11,4 +27,8 @@
 		    <version>2.2.12</version>
 		</dependency>
   </dependencies>
+  <properties>
+  	<maven.compiler.source>1.8</maven.compiler.source>
+  	<maven.compiler.target>1.8</maven.compiler.target>
+  </properties>
 </project>
